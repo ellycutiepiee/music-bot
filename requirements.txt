@@ -1,0 +1,6 @@
+discord.py>=2.0.0
+yt-dlp
+python-dotenv
+PyNaCl
+requests
+beautifulsoup4
