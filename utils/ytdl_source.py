@@ -31,7 +31,7 @@ ytdl_format_options = {
 ffmpeg_options = {
     'options': '-vn',
     # Improved options for stability and buffering + FORCE START AT 00:00:00
-    'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -probesize 200M -ss 00:00:00 -user_agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"' 
+    'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -probesize 200M -ss 00:00:00 -user_agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36" -headers "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"' 
 }
 
 ytdl = yt_dlp.YoutubeDL(ytdl_format_options)
@@ -76,4 +76,8 @@ class YTDLSource(discord.PCMVolumeTransformer):
             data = data['entries'][0]
 
         filename = data['url'] if stream else ytdl.prepare_filename(data)
+        
+        # Inject the User-Agent directly into the filename URL if possible, or rely on before_options
+        # Some versions of FFmpeg need headers passed differently
+        
         return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
