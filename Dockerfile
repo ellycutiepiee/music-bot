@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Install system dependencies (FFmpeg is required for music, git for some pip packages)
 RUN apt-get update && \
-    apt-get install -y ffmpeg git build-essential && \
+    apt-get install -y ffmpeg git build-essential libffi-dev libsodium-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
