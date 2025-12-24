@@ -3,7 +3,7 @@ from discord.ext import commands
 import os
 import asyncio
 from dotenv import load_dotenv
-from keep_alive import keep_alive
+from web_app import keep_alive
 
 
 # Add FFmpeg to PATH temporarily for this session

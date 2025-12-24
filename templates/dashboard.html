@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Play History Section -->
+    <div class="border border-[#00ff41] p-6 h-[80vh] flex flex-col">
+        <h2 class="text-2xl font-bold mb-6 border-b border-[#00ff41] pb-2">> PLAYBACK_HISTORY</h2>
+        
+        <div class="overflow-y-auto flex-grow pr-2 space-y-4">
+            {% if history %}
+                {% for song in history %}
+                <div class="border border-[#00ff41]/50 p-3 hover:bg-[#00ff41]/10 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-bold truncate w-3/4">{{ song.title }}</h4>
+                        <span class="text-xs border border-[#00ff41] px-1">{{ song.platform }}</span>
+                    </div>
+                    <div class="mt-2 flex justify-between text-xs opacity-60">
+                        <span>{{ song.played_at }}</span>
+                        <a href="{{ song.url }}" target="_blank" class="hover:text-white hover:underline">OPEN_SOURCE_LINK</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center opacity-50 mt-10">NO_DATA_FOUND_IN_LOGS</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Upload Section -->
+    <div class="flex flex-col gap-8">
+        <div class="border border-[#00ff41] p-6">
+            <h2 class="text-2xl font-bold mb-6 border-b border-[#00ff41] pb-2">> UPLOAD_BINARY</h2>
+            
+            <form action="/upload" method="post" enctype="multipart/form-data" class="space-y-4">
+                <div class="border-2 border-dashed border-[#00ff41] p-8 text-center cursor-pointer hover:bg-[#00ff41]/10 transition-colors relative">
+                    <input type="file" name="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" required>
+                    <p>DRAG_DROP_OR_CLICK_TO_SELECT</p>
+                    <p class="text-xs opacity-50 mt-2">Supported: .mp3, .wav, .ogg</p>
+                </div>
+                <button type="submit" class="w-full py-3 border border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-colors font-bold">
+                    EXECUTE_UPLOAD()
+                </button>
+            </form>
+        </div>
+
+        <div class="border border-[#00ff41] p-6 flex-grow">
+            <h2 class="text-2xl font-bold mb-6 border-b border-[#00ff41] pb-2">> SERVER_FILES</h2>
+            <div class="space-y-2 overflow-y-auto max-h-[30vh]">
+                {% if files %}
+                    {% for file in files %}
+                    <div class="flex justify-between items-center p-2 border-b border-[#00ff41]/30 hover:bg-[#00ff41]/5">
+                        <span class="truncate">{{ file }}</span>
+                        <button class="text-xs text-[#00ff41] hover:text-white border border-[#00ff41] px-2 py-1" onclick="copyCommand('{{ file }}')">
+                            COPY_CMD
+                        </button>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="opacity-50 text-sm">DIRECTORY_EMPTY</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyCommand(filename) {
+    const cmd = `!play file ${filename}`;
+    navigator.clipboard.writeText(cmd).then(() => {
+        alert('COMMAND_COPIED_TO_CLIPBOARD: ' + cmd);
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Bot Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Space Mono', monospace;
+            background-color: #050505;
+            color: #00ff41;
+        }
+
+        .neon-border {
+            box-shadow: 0 0 10px #00ff41, inset 0 0 5px #00ff41;
+            border: 1px solid #00ff41;
+        }
+
+        .neon-text {
+            text-shadow: 0 0 5px #00ff41;
+        }
+
+        .glitch-hover:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: #ffffff;
+            background-color: #00ff41;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00ff41; 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00cc33; 
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <nav class="border-b border-[#00ff41] p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold neon-text tracking-wider">MUSIC_BOT_V1</a>
+            <div class="space-x-4">
+                {% if current_user.is_authenticated %}
+                    <span class="text-sm opacity-70">LOGGED_IN_AS: {{ current_user.username }}</span>
+                    <a href="/dashboard" class="px-4 py-2 border border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-colors duration-300">DASHBOARD</a>
+                    <a href="/logout" class="px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-black transition-colors duration-300">LOGOUT</a>
+                {% else %}
+                    <a href="/login" class="px-4 py-2 border border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-colors duration-300">LOGIN_WITH_DISCORD</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto p-4">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <div class="border border-[#00ff41] p-2 mb-2 bg-black/50 text-[#00ff41] neon-text">
+                            > {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="border-t border-[#00ff41] p-4 text-center opacity-50 text-xs">
+        <p>SYSTEM_STATUS: ONLINE | TERMINAL_ID: {{ range(1000, 9999) | random }}</p>
+    </footer>
+</body>
+</html>

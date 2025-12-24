@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center h-[70vh] text-center">
+    <h1 class="text-6xl font-bold mb-8 neon-text glitch-hover cursor-default">SYSTEM_READY</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl">
+        <div class="border border-[#00ff41] p-6 hover:bg-[#00ff41]/10 transition-all duration-300">
+            <h3 class="text-xl font-bold mb-4">> PLAY_MUSIC</h3>
+            <p class="opacity-70 text-sm">Supported protocols:</p>
+            <ul class="list-none mt-2 space-y-1 text-sm">
+                <li>[+] YouTube</li>
+                <li>[+] SoundCloud</li>
+                <li>[+] Spotify</li>
+                <li>[+] Local Files</li>
+            </ul>
+        </div>
+
+        <div class="border border-[#00ff41] p-6 hover:bg-[#00ff41]/10 transition-all duration-300">
+            <h3 class="text-xl font-bold mb-4">> HISTORY_LOGS</h3>
+            <p class="opacity-70 text-sm">Track your audio consumption data. Persistent storage enabled.</p>
+        </div>
+
+        <div class="border border-[#00ff41] p-6 hover:bg-[#00ff41]/10 transition-all duration-300">
+            <h3 class="text-xl font-bold mb-4">> FILE_UPLOAD</h3>
+            <p class="opacity-70 text-sm">Upload custom audio binaries to the server matrix.</p>
+        </div>
+    </div>
+
+    <div class="mt-12">
+        {% if not current_user.is_authenticated %}
+            <a href="/login" class="text-2xl px-8 py-4 border-2 border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-all duration-300 neon-border animate-pulse">
+                INITIALIZE_SESSION_login()
+            </a>
+        {% else %}
+            <a href="/dashboard" class="text-2xl px-8 py-4 border-2 border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-all duration-300 neon-border">
+                ACCESS_TERMINAL_dashboard()
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

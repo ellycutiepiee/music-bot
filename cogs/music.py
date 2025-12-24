@@ -2,7 +2,10 @@ import discord
 from discord.ext import commands
 from discord.ui import Button, View
 from utils.ytdl_source import YTDLSource
+from web_app import add_history
 import asyncio
+import os
+
 
 # --- 🎨 CUSTOM EMOJI CONFIGURATION ---
 # We use the specific unicode symbols requested by the user.
@@ -113,6 +116,12 @@ class Music(commands.Cog):
         if len(queue) > 0:
             player = queue.pop(0)
             
+            # Log to history
+            if hasattr(player, 'requester'):
+                requester_id = player.requester.id
+                platform = player.data.get('extractor', 'unknown')
+                add_history(requester_id, player.title, player.data.get('webpage_url', 'local'), platform)
+
             # Modern Dark Theme Embed
             # Color: Dark Violet (0x8A2BE2)
             embed = discord.Embed(
@@ -190,7 +199,20 @@ class Music(commands.Cog):
         
         async with ctx.typing():
             try:
-                player = await YTDLSource.from_url(query, loop=self.bot.loop, stream=True)
+                if query.startswith("file "):
+                    filename = query[5:].strip()
+                    filepath = os.path.join("uploads", filename)
+                    if not os.path.exists(filepath):
+                        return await ctx.send(f"File '{filename}' not found on server. Upload it on the dashboard!")
+                    
+                    source = discord.FFmpegPCMAudio(filepath)
+                    player = discord.PCMVolumeTransformer(source, volume=0.5)
+                    player.title = filename
+                    player.data = {'webpage_url': 'local', 'extractor': 'local_file', 'uploader': 'Server'}
+                    player.requester = ctx.author
+                else:
+                    player = await YTDLSource.from_url(query, loop=self.bot.loop, stream=True)
+                    player.requester = ctx.author
                 
                 queue = self.get_queue(ctx.guild.id)
                 queue.append(player)
