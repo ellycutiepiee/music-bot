@@ -162,7 +162,7 @@ class Music(commands.Cog):
         if ctx.voice_client is not None:
             await ctx.voice_client.move_to(channel)
         else:
-            await channel.connect()
+            await channel.connect(self_deaf=True)
         
         await ctx.send(f"Joined {channel.name}")
 
@@ -181,7 +181,7 @@ class Music(commands.Cog):
             return await ctx.send("You are not connected to a voice channel.")
 
         if ctx.voice_client is None:
-            await ctx.author.voice.channel.connect()
+            await ctx.author.voice.channel.connect(self_deaf=True)
         
         if ctx.voice_client.channel != ctx.author.voice.channel:
              return await ctx.send("You must be in the same voice channel as me to play music.")
