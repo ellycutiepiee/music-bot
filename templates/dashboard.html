@@ -1,64 +1,108 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    <!-- Play History Section -->
-    <div class="border border-[#00ff41] p-6 h-[80vh] flex flex-col">
-        <h2 class="text-2xl font-bold mb-6 border-b border-[#00ff41] pb-2">> PLAYBACK_HISTORY</h2>
-        
-        <div class="overflow-y-auto flex-grow pr-2 space-y-4">
-            {% if history %}
-                {% for song in history %}
-                <div class="border border-[#00ff41]/50 p-3 hover:bg-[#00ff41]/10 transition-colors">
-                    <div class="flex justify-between items-start">
-                        <h4 class="font-bold truncate w-3/4">{{ song.title }}</h4>
-                        <span class="text-xs border border-[#00ff41] px-1">{{ song.platform }}</span>
-                    </div>
-                    <div class="mt-2 flex justify-between text-xs opacity-60">
-                        <span>{{ song.played_at }}</span>
-                        <a href="{{ song.url }}" target="_blank" class="hover:text-white hover:underline">OPEN_SOURCE_LINK</a>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-center opacity-50 mt-10">NO_DATA_FOUND_IN_LOGS</p>
-            {% endif %}
+<div class="container mx-auto px-6 py-10">
+    <!-- User Welcome -->
+    <div class="flex items-center justify-between mb-12">
+        <div class="flex items-center gap-4">
+            <img src="{{ current_user.avatar_url }}" alt="Avatar" class="w-16 h-16 rounded-full border-2 border-[#00ff41]">
+            <div>
+                <h1 class="text-3xl font-bold">Welcome back, {{ current_user.username }}</h1>
+                <p class="text-gray-400 text-sm">Manage your music and files</p>
+            </div>
+        </div>
+        <div class="hidden md:block">
+            <span class="px-4 py-2 rounded-lg bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/20 text-sm font-semibold">
+                <i class="fas fa-signal mr-2"></i>Status: Online
+            </span>
         </div>
     </div>
 
-    <!-- Upload Section -->
-    <div class="flex flex-col gap-8">
-        <div class="border border-[#00ff41] p-6">
-            <h2 class="text-2xl font-bold mb-6 border-b border-[#00ff41] pb-2">> UPLOAD_BINARY</h2>
-            
-            <form action="/upload" method="post" enctype="multipart/form-data" class="space-y-4">
-                <div class="border-2 border-dashed border-[#00ff41] p-8 text-center cursor-pointer hover:bg-[#00ff41]/10 transition-colors relative">
-                    <input type="file" name="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" required>
-                    <p>DRAG_DROP_OR_CLICK_TO_SELECT</p>
-                    <p class="text-xs opacity-50 mt-2">Supported: .mp3, .wav, .ogg</p>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left Column: History -->
+        <div class="lg:col-span-2 space-y-8">
+            <div class="bg-[#0a0a0a] border border-white/5 rounded-2xl overflow-hidden">
+                <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                    <h2 class="text-xl font-bold"><i class="fas fa-history mr-2 text-[#00ff41]"></i> Listening History</h2>
+                    <span class="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded">Last 50 Songs</span>
                 </div>
-                <button type="submit" class="w-full py-3 border border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-colors font-bold">
-                    EXECUTE_UPLOAD()
-                </button>
-            </form>
+                
+                <div class="overflow-y-auto max-h-[600px] p-4 space-y-2">
+                    {% if history %}
+                        {% for song in history %}
+                        <div class="group flex items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+                            <div class="flex items-center gap-4 overflow-hidden">
+                                <div class="w-10 h-10 rounded-lg bg-[#00ff41]/10 flex items-center justify-center text-[#00ff41] shrink-0">
+                                    <i class="fas fa-music"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <h4 class="font-semibold truncate text-white group-hover:text-[#00ff41] transition-colors">{{ song.title }}</h4>
+                                    <p class="text-xs text-gray-500">{{ song.played_at }} • {{ song.platform }}</p>
+                                </div>
+                            </div>
+                            <a href="{{ song.url }}" target="_blank" class="p-2 text-gray-400 hover:text-white transition-colors">
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-20 text-gray-500">
+                            <i class="fas fa-ghost text-4xl mb-4 opacity-50"></i>
+                            <p>No listening history found.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
 
-        <div class="border border-[#00ff41] p-6 flex-grow">
-            <h2 class="text-2xl font-bold mb-6 border-b border-[#00ff41] pb-2">> SERVER_FILES</h2>
-            <div class="space-y-2 overflow-y-auto max-h-[30vh]">
-                {% if files %}
-                    {% for file in files %}
-                    <div class="flex justify-between items-center p-2 border-b border-[#00ff41]/30 hover:bg-[#00ff41]/5">
-                        <span class="truncate">{{ file }}</span>
-                        <button class="text-xs text-[#00ff41] hover:text-white border border-[#00ff41] px-2 py-1" onclick="copyCommand('{{ file }}')">
-                            COPY_CMD
-                        </button>
+        <!-- Right Column: Uploads & Files -->
+        <div class="space-y-8">
+            
+            <!-- Upload Card -->
+            <div class="bg-[#0a0a0a] border border-white/5 rounded-2xl p-6">
+                <h2 class="text-xl font-bold mb-6"><i class="fas fa-cloud-upload-alt mr-2 text-[#00ff41]"></i> Upload File</h2>
+                
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <div class="relative w-full h-48 border-2 border-dashed border-white/10 rounded-xl hover:border-[#00ff41]/50 hover:bg-[#00ff41]/5 transition-all flex flex-col items-center justify-center text-center cursor-pointer group">
+                        <input type="file" name="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" required>
+                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-file-audio text-gray-400 group-hover:text-[#00ff41]"></i>
+                        </div>
+                        <p class="text-sm font-medium text-gray-300">Click or Drag file here</p>
+                        <p class="text-xs text-gray-500 mt-1">MP3, WAV, OGG (Max 50MB)</p>
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <p class="opacity-50 text-sm">DIRECTORY_EMPTY</p>
-                {% endif %}
+                    <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-[#00ff41] hover:bg-[#00cc33] text-black font-bold transition-transform active:scale-95">
+                        Upload to Server
+                    </button>
+                </form>
             </div>
+
+            <!-- Server Files -->
+            <div class="bg-[#0a0a0a] border border-white/5 rounded-2xl overflow-hidden">
+                <div class="p-6 border-b border-white/5">
+                    <h2 class="text-xl font-bold"><i class="fas fa-server mr-2 text-[#00ff41]"></i> Your Files</h2>
+                </div>
+                
+                <div class="p-4 space-y-2 max-h-[400px] overflow-y-auto">
+                    {% if files %}
+                        {% for file in files %}
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 transition-colors">
+                            <div class="flex items-center gap-3 overflow-hidden">
+                                <i class="fas fa-file-audio text-[#00ff41]"></i>
+                                <span class="text-sm truncate text-gray-300">{{ file }}</span>
+                            </div>
+                            <button onclick="copyCommand('{{ file }}')" class="text-xs bg-black/50 hover:bg-[#00ff41] hover:text-black text-gray-400 px-3 py-1.5 rounded-md transition-all border border-white/10">
+                                Copy Cmd
+                            </button>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-center text-gray-500 py-8 text-sm">No files uploaded yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -67,7 +111,8 @@
 function copyCommand(filename) {
     const cmd = `!play file ${filename}`;
     navigator.clipboard.writeText(cmd).then(() => {
-        alert('COMMAND_COPIED_TO_CLIPBOARD: ' + cmd);
+        // Simple toast notification could go here
+        alert('Copied to clipboard: ' + cmd);
     });
 }
 </script>

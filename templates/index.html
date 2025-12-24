@@ -1,42 +1,127 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="flex flex-col items-center justify-center h-[70vh] text-center">
-    <h1 class="text-6xl font-bold mb-8 neon-text glitch-hover cursor-default">SYSTEM_READY</h1>
+<!-- Hero Section -->
+<section class="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#00ff41] rounded-full blur-[150px] opacity-10"></div>
     
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl">
-        <div class="border border-[#00ff41] p-6 hover:bg-[#00ff41]/10 transition-all duration-300">
-            <h3 class="text-xl font-bold mb-4">> PLAY_MUSIC</h3>
-            <p class="opacity-70 text-sm">Supported protocols:</p>
-            <ul class="list-none mt-2 space-y-1 text-sm">
-                <li>[+] YouTube</li>
-                <li>[+] SoundCloud</li>
-                <li>[+] Spotify</li>
-                <li>[+] Local Files</li>
-            </ul>
+    <div class="container mx-auto px-6 relative z-10 text-center">
+        <span class="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[#00ff41] text-xs font-semibold mb-6 tracking-wide uppercase">
+            v2.0 Now Live
+        </span>
+        
+        <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tight">
+            The Best <span class="gradient-text">Discord Music Bot</span><br>
+            For Your Community
+        </h1>
+        
+        <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+            Experience high-quality music streaming with a modern dashboard, 
+            custom file uploads, and zero lag. Free and open source.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="https://discord.com/oauth2/authorize?client_id={{ config['CLIENT_ID'] }}&permissions=8&scope=bot" target="_blank" 
+               class="px-8 py-4 rounded-full bg-[#00ff41] hover:bg-[#00cc33] text-black font-bold text-lg transition-transform hover:scale-105 shadow-[0_0_20px_rgba(0,255,65,0.3)] w-full sm:w-auto">
+                Add to Discord
+            </a>
+            <a href="#features" 
+               class="px-8 py-4 rounded-full bg-white/5 hover:bg-white/10 text-white font-semibold text-lg border border-white/10 transition-all w-full sm:w-auto">
+                View Features
+            </a>
         </div>
 
-        <div class="border border-[#00ff41] p-6 hover:bg-[#00ff41]/10 transition-all duration-300">
-            <h3 class="text-xl font-bold mb-4">> HISTORY_LOGS</h3>
-            <p class="opacity-70 text-sm">Track your audio consumption data. Persistent storage enabled.</p>
-        </div>
-
-        <div class="border border-[#00ff41] p-6 hover:bg-[#00ff41]/10 transition-all duration-300">
-            <h3 class="text-xl font-bold mb-4">> FILE_UPLOAD</h3>
-            <p class="opacity-70 text-sm">Upload custom audio binaries to the server matrix.</p>
+        <!-- Supported Platforms -->
+        <div class="mt-20 pt-10 border-t border-white/5">
+            <p class="text-sm text-gray-500 mb-6 uppercase tracking-widest">Supported Platforms</p>
+            <div class="flex flex-wrap justify-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                <div class="flex items-center gap-2"><i class="fab fa-spotify text-2xl"></i> <span class="font-semibold">Spotify</span></div>
+                <div class="flex items-center gap-2"><i class="fab fa-soundcloud text-2xl"></i> <span class="font-semibold">SoundCloud</span></div>
+                <div class="flex items-center gap-2"><i class="fab fa-youtube text-2xl"></i> <span class="font-semibold">YouTube</span></div>
+                <div class="flex items-center gap-2"><i class="fab fa-apple text-2xl"></i> <span class="font-semibold">Apple Music</span></div>
+                <div class="flex items-center gap-2"><i class="fas fa-file-audio text-2xl"></i> <span class="font-semibold">Local Files</span></div>
+            </div>
         </div>
     </div>
+</section>
 
-    <div class="mt-12">
-        {% if not current_user.is_authenticated %}
-            <a href="/login" class="text-2xl px-8 py-4 border-2 border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-all duration-300 neon-border animate-pulse">
-                INITIALIZE_SESSION_login()
-            </a>
-        {% else %}
-            <a href="/dashboard" class="text-2xl px-8 py-4 border-2 border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-all duration-300 neon-border">
-                ACCESS_TERMINAL_dashboard()
-            </a>
-        {% endif %}
+<!-- Features Grid -->
+<section id="features" class="py-24 bg-[#080808]">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Why Choose MusicBot?</h2>
+            <p class="text-gray-400 max-w-xl mx-auto">We provide the features you actually need, without the bloat.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="glass-card p-8 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-[#00ff41]/10 flex items-center justify-center mb-6 text-[#00ff41]">
+                    <i class="fas fa-bolt text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Zero Lag</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Powered by high-performance servers ensuring your music never stutters or buffers.
+                </p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="glass-card p-8 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-[#00ff41]/10 flex items-center justify-center mb-6 text-[#00ff41]">
+                    <i class="fas fa-cloud-upload-alt text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Custom Uploads</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Upload your own MP3 files directly to our dashboard and play them instantly.
+                </p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="glass-card p-8 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-[#00ff41]/10 flex items-center justify-center mb-6 text-[#00ff41]">
+                    <i class="fas fa-history text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">History Tracking</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Keep track of every song you've listened to. Replay your favorites with one click.
+                </p>
+            </div>
+            
+             <!-- Feature 4 -->
+            <div class="glass-card p-8 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-[#00ff41]/10 flex items-center justify-center mb-6 text-[#00ff41]">
+                    <i class="fas fa-volume-up text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">High Quality Audio</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Crystal clear audio streaming at the highest bitrate supported by Discord.
+                </p>
+            </div>
+
+             <!-- Feature 5 -->
+            <div class="glass-card p-8 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-[#00ff41]/10 flex items-center justify-center mb-6 text-[#00ff41]">
+                    <i class="fas fa-sliders-h text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Web Dashboard</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Control the bot, view logs, and manage files from a beautiful web interface.
+                </p>
+            </div>
+
+             <!-- Feature 6 -->
+            <div class="glass-card p-8 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-[#00ff41]/10 flex items-center justify-center mb-6 text-[#00ff41]">
+                    <i class="fas fa-shield-alt text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Safe & Secure</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    We value your privacy. Your data is secure and never sold to third parties.
+                </p>
+            </div>
+        </div>
     </div>
-</div>
+</section>
 {% endblock %}

@@ -1,81 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Bot Dashboard</title>
+    <title>Music Bot - The Ultimate Audio Experience</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
         
         body {
-            font-family: 'Space Mono', monospace;
+            font-family: 'Inter', sans-serif;
             background-color: #050505;
-            color: #00ff41;
-        }
-
-        .neon-border {
-            box-shadow: 0 0 10px #00ff41, inset 0 0 5px #00ff41;
-            border: 1px solid #00ff41;
-        }
-
-        .neon-text {
-            text-shadow: 0 0 5px #00ff41;
-        }
-
-        .glitch-hover:hover {
-            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
             color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #ffffff, #00ff41);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
             background-color: #00ff41;
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
         }
 
-        @keyframes glitch {
-            0% { transform: translate(0) }
-            20% { transform: translate(-2px, 2px) }
-            40% { transform: translate(-2px, -2px) }
-            60% { transform: translate(2px, 2px) }
-            80% { transform: translate(2px, -2px) }
-            100% { transform: translate(0) }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s, border-color 0.3s;
         }
 
-        /* Scrollbar */
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff41;
+        }
+
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #0a0a0a; 
+            background: #050505;
         }
         ::-webkit-scrollbar-thumb {
-            background: #00ff41; 
+            background: #1f1f1f;
+            border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #00cc33; 
+            background: #00ff41;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
-    <nav class="border-b border-[#00ff41] p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold neon-text tracking-wider">MUSIC_BOT_V1</a>
-            <div class="space-x-4">
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-[#050505]/90 backdrop-blur-md border-b border-white/5">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold tracking-tight flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#00ff41] to-emerald-800"></div>
+                MusicBot
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="/" class="nav-link text-sm font-medium hover:text-[#00ff41]">Home</a>
+                <a href="#features" class="nav-link text-sm font-medium hover:text-[#00ff41]">Features</a>
+                <a href="#" class="nav-link text-sm font-medium hover:text-[#00ff41]">Commands</a>
+                <a href="#" class="nav-link text-sm font-medium hover:text-[#00ff41]">Premium</a>
+            </div>
+
+            <div class="flex items-center gap-4">
                 {% if current_user.is_authenticated %}
-                    <span class="text-sm opacity-70">LOGGED_IN_AS: {{ current_user.username }}</span>
-                    <a href="/dashboard" class="px-4 py-2 border border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-colors duration-300">DASHBOARD</a>
-                    <a href="/logout" class="px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-black transition-colors duration-300">LOGOUT</a>
+                    <a href="/dashboard" class="px-5 py-2 rounded-full bg-white/5 hover:bg-white/10 text-sm font-semibold border border-white/10 transition-all">
+                        Dashboard
+                    </a>
+                    <a href="/logout" class="text-gray-400 hover:text-white text-sm">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
                 {% else %}
-                    <a href="/login" class="px-4 py-2 border border-[#00ff41] hover:bg-[#00ff41] hover:text-black transition-colors duration-300">LOGIN_WITH_DISCORD</a>
+                    <a href="/login" class="px-6 py-2 rounded-full bg-[#00ff41] hover:bg-[#00cc33] text-black text-sm font-bold transition-transform hover:scale-105 shadow-[0_0_15px_rgba(0,255,65,0.4)]">
+                        Login
+                    </a>
                 {% endif %}
             </div>
         </div>
     </nav>
 
-    <main class="flex-grow container mx-auto p-4">
+    <!-- Main Content -->
+    <main class="flex-grow pt-20">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <div class="mb-4">
+                <div class="container mx-auto px-6 mt-4">
                     {% for message in messages %}
-                        <div class="border border-[#00ff41] p-2 mb-2 bg-black/50 text-[#00ff41] neon-text">
-                            > {{ message }}
+                        <div class="bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-3 rounded-lg mb-4 text-sm">
+                            {{ message }}
                         </div>
                     {% endfor %}
                 </div>
@@ -85,8 +121,50 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="border-t border-[#00ff41] p-4 text-center opacity-50 text-xs">
-        <p>SYSTEM_STATUS: ONLINE | TERMINAL_ID: {{ range(1000, 9999) | random }}</p>
+    <!-- Footer -->
+    <footer class="bg-[#020202] border-t border-white/5 py-12 mt-20">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <div class="w-6 h-6 rounded-full bg-[#00ff41]"></div>
+                        MusicBot
+                    </h3>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm">
+                        The ultimate high-quality music experience for your Discord server. 
+                        Stream from Spotify, SoundCloud, and more with zero lag.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4 text-white">Product</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-[#00ff41] transition-colors">Features</a></li>
+                        <li><a href="#" class="hover:text-[#00ff41] transition-colors">Premium</a></li>
+                        <li><a href="#" class="hover:text-[#00ff41] transition-colors">Changelog</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4 text-white">Resources</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-[#00ff41] transition-colors">Support</a></li>
+                        <li><a href="#" class="hover:text-[#00ff41] transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-[#00ff41] transition-colors">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/5 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+                <p>&copy; 2024 MusicBot. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white"><i class="fab fa-discord text-lg"></i></a>
+                    <a href="#" class="hover:text-white"><i class="fab fa-twitter text-lg"></i></a>
+                    <a href="#" class="hover:text-white"><i class="fab fa-github text-lg"></i></a>
+                </div>
+            </div>
+        </div>
     </footer>
+
 </body>
 </html>
