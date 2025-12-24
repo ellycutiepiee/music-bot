@@ -3,6 +3,8 @@ from discord.ext import commands
 import os
 import asyncio
 from dotenv import load_dotenv
+from keep_alive import keep_alive
+
 
 # Add FFmpeg to PATH temporarily for this session
 ffmpeg_path = r"C:\Users\ellyc\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.0.1-full_build\bin"
@@ -42,6 +44,7 @@ if __name__ == '__main__':
         print("Please set your bot token in the .env file.")
     else:
         try:
+            keep_alive() # Start the web server
             bot.run(TOKEN)
         except discord.errors.LoginFailure:
             print("Failed to login: Invalid token.")

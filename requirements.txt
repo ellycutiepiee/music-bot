@@ -4,3 +4,4 @@ python-dotenv
 PyNaCl
 requests
 beautifulsoup4
+flask
